@@ -26,5 +26,9 @@ app.post('/register', function (req, res) {
 	res.status(200).end()
 });
 
+var docs = require('./docs.json')
+app.get('/documents', function (req, res) {
+	res.send(JSON.stringify(docs));
+})
 
 app.listen(process.env.PORT || 3000);

@@ -1,6 +1,7 @@
 var B = require('backbone'),
 	_ = require('underscore'),
-	$ = require('jquery');
+	$ = require('jquery'),
+	user = require('../models/User');
 
 var text = function (opts) {
 	opts = opts || {};
@@ -32,32 +33,42 @@ var fieldsHash = {
     // user: {
         name: text(),
         phone: text({
-        	re: /.{14}/
+        	re: /^\d\s?(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}$/
         }),
         email: text({
-        	re: /.{3}/
+        	re: /^((?:(?:(?:[a-zA-Z0-9][\.\-\+_]?)*)[a-zA-Z0-9])+)\@((?:(?:(?:[a-zA-Z0-9][\.\-_]?){0,62})[a-zA-Z0-9])+)\.([a-zA-Z0-9]{2,6})$/
         }),
         password: text({
-
+        	type: 'password',
         	re: length(4)
         }),
     // },
-    car_model: text({
+    carModel: text({
     	mask: 'Type the model of your car model',
     	re: length(1)
     }),
     // company: {
         vatNumber: text({
         	mask: 'Type the vat number',
-        	re: length(10)
+        	re: length(5)
         }),
-        name: text(),
+        companyName: text({
+        	mask: 'your company name'
+        }),
         // address: {
-            line1: text_,
-            line2: text_,
-            postalCode: text_,
-            // city: text_,
-            countryCode: selectable()
+            line1: text({
+            	mask: 'street'
+            }),
+            line2: text({
+            	mask: 'building number'
+            }),
+            postalCode: text({
+            	mask: 'postal code'
+            }),
+            companyCity: text(),
+            countryCode: selectable({
+            	options: 'Russia,USA,UK,Spain'
+            })
         // }
     // }
 }
@@ -65,12 +76,11 @@ var fieldsHash = {
 module.exports = B.View.extend({
 	tagName: 'input',
 	className: 'fancy-textbox masked form-control',
-	events: {
-		'focusin': 'onFocusin',
-		'focusout': 'onFocusout'
-	},
 	initialize: function (opts) {
+		
 		var options = this.options = fieldsHash[opts.inputName] || {};
+		options.name = opts.inputName;
+
 		if (options.type === 'selectable') {
 			var $el = this.$el = $('<select></select>');
 
@@ -84,10 +94,17 @@ module.exports = B.View.extend({
 		this.$el.attr({
 			type: options.type || 'text',
 			'data-animation': options.animation || 'slide',
-			'data-label': options.label || 'Enter',
+			'data-label': opts.edit ? 'Edit' : 'Enter',
 			'data-mask': this.mask
 		})
 
+	},
+	initWatcher: function () {
+		this.events = {
+			'focusin': 'onFocusin',
+			'focusout': 'onFocusout'
+		};
+		this.delegateEvents();
 	},
 	onFocusin: function () {
 		function handler () {
@@ -101,17 +118,27 @@ module.exports = B.View.extend({
 	render: function () {
 		if (this.options.autocomplete) 
 			this.$el.addClass('tpeahead').attr('data-url', this.options.autocomplete)
+
+		if (user.getProp(this.options.name)) this.$el.val(user.getProp(this.options.name))
 		return this;
 	},
 	validate: function () {
-		if (this.$el.val() === this.mask) {
+		if (!this.check()) {
 			this.trigger('invalid');
-			this.$el.parent().addClass('has-error')
+			this.$el.parent().addClass('has-error');
+			this.initWatcher();
 			return false;
 		}
+
 		return true;
 	},
 	check: function () {
-		return this.$el.val() !== this.mask && this.re.test(this.el.val());
+		if (this.$el.val() === this.mask) return false;
+
+		if (this.re && !this.re.test(this.$el.val())) return false;
+		return true;
+	},
+	setToUser: function () {
+		user.setProp(this.options.name, this.$el.val());
 	}
 });

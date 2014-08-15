@@ -1,8 +1,8 @@
 var B = require('backbone'),
 	FieldsetView = require('./FieldsetView.js'),
 	$ = require('jquery'),
-	_ = require('underscore');
-
+	_ = require('underscore'),
+	user = require('../models/User');;
 
 var fieldSets = [{
 	name: 'General info',
@@ -12,16 +12,17 @@ var fieldSets = [{
 	inputs: ['name', 'phone', 'email', 'password']
 }, {
 	name: 'Car model',
-	inputs: ['car']
+	inputs: ['carModel']
 }, {
 	name: 'Company',
-	inputs: ['vatNumber', 'name', {
+	inputs: ['vatNumber', 'companyName', {
 		name: 'address',
-		inputs: ['line1', 'line2', 'postalCode', 'city', 'countryCode']
+		inputs: ['line1', 'line2', 'postalCode', 'companyCity', 'countryCode']
 	}]
 }];
 
-var _template = '<ul class="registration-nav"></ul> <div class="registration-form-container"><fieldset></fieldset></div>' 
+var _template = '<ul class="registration-nav"></ul> <div class="registration-form-container"><fieldset></fieldset></div>',
+	edit = false;
 
 module.exports = B.View.extend({
 	tagName: 'form',
@@ -30,6 +31,7 @@ module.exports = B.View.extend({
 		'click .registration-nav a': 'onNavClick',
 		'click .submit-button': 'onSubmit'
 	},
+	edit: false,
 	onNavClick: function ($evt) {
 		var $target = $($evt.target),
 			i = $target.attr('data-fs-index'),
@@ -44,13 +46,21 @@ module.exports = B.View.extend({
 	},
 	onSubmit: function ($evt) {
 		var that = this
-		// if (!this.validate())
-		// 	return;
+
+		if (!this.validate())
+			// return
+			console.log('this');
+
+		this.fieldSets.forEach(function (fs) {
+			fs.setToUser();
+		});
+
 		$.ajax({
 			type: 'POST',
 			url: '/register',
-			data: {a: 'adsf'},
+			data: user.toJSON(),
 			success: function () {
+				edit = true;
 				that.trigger('registered', {});
 			} 
 		});
@@ -69,15 +79,14 @@ module.exports = B.View.extend({
 	render: function (template) {
 		this.$el.html(template || _template);
 
-		var fs,
-			$container = this.$('div'),
+		var $container = this.$('div'),
 			$nav = this.$('ul'),
 			that = this;
 
 		this.fieldSets = fieldSets.map(function (fs, index) {
 			fs.index = index;
 			fs.parentView = that;
-			sibling = fs;
+			fs.edit = edit;
 
 			var v = new FieldsetView(fs).render();
 			v.$el.appendTo($container);

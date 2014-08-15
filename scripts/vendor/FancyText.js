@@ -69,7 +69,10 @@ function ($) {
                     arrow.css('left', labelWidth / 2 + 'px');
                 }
 
-                textbox.val(mask);
+                if ($(this).val() == '') {
+                    textbox.val(mask);
+                }
+               
 
                 wrapper.find('input').focus(function () {
 

@@ -3,7 +3,6 @@ var Backbone = require('backbone'),
 	_ = require('underscore'),
 	bselect = require('bselect')($);
 
-
 // hook for bootstrap since it requires global jQuery object
 // also hooked bootstrap.js itself
 window.jQuery = $;
@@ -16,8 +15,7 @@ require('./vendor/FancyText.js')($);
 Backbone.$ = $;
 
 
-var FieldsetView = require('./views/FieldsetView.js'),
-	RegistrationView = require('./views/RegistrationView.js'),
+var RegistrationView = require('./views/RegistrationView.js'),
 	CabinetView = require('./views/CabinetView.js');
 
 

@@ -15297,7 +15297,6 @@ var Backbone = require('backbone'),
 	_ = require('underscore'),
 	bselect = require('bselect')($);
 
-
 // hook for bootstrap since it requires global jQuery object
 // also hooked bootstrap.js itself
 window.jQuery = $;
@@ -15310,8 +15309,7 @@ require('./vendor/FancyText.js')($);
 Backbone.$ = $;
 
 
-var FieldsetView = require('./views/FieldsetView.js'),
-	RegistrationView = require('./views/RegistrationView.js'),
+var RegistrationView = require('./views/RegistrationView.js'),
 	CabinetView = require('./views/CabinetView.js');
 
 
@@ -15376,7 +15374,66 @@ function setUpInputs () {
 
 $(onLoad);
 
-},{"./styles/bootstrap-3.2.0/dist/js/bootstrap.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js","./vendor/FancyText.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/vendor/FancyText.js","./views/CabinetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/CabinetView.js","./views/FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","./views/RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","bselect":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/bselect/js/bselect.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","jquery-ui/autocomplete":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery-ui/autocomplete.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js":[function(require,module,exports){
+},{"./styles/bootstrap-3.2.0/dist/js/bootstrap.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js","./vendor/FancyText.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/vendor/FancyText.js","./views/CabinetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/CabinetView.js","./views/RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","bselect":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/bselect/js/bselect.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","jquery-ui/autocomplete":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery-ui/autocomplete.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js":[function(require,module,exports){
+var B = require('backbone')
+
+var User  =B.Model.extend({
+	defaults: {
+		"city": null,
+		"applicant": null,
+		"user": {
+			"name": null,
+			"phone": null,
+			"email": null,
+			"password": null,
+		},
+		"car_model": null,
+		"company": {
+			"vat_number": null,
+			"company_name": null,
+			"address": { 
+				"line1": null,
+				"line2": null,
+				"postal_code": null,
+				"company_city": null,
+				"country_code": null,
+			}
+		}
+	},
+	initialize: function () {
+	},
+	setProp: function sp (prop, value, obj) {
+		obj = obj || this.attributes;
+		prop = prop.replace(' ', '').toLowerCase()
+		for (var p in obj) {
+			if (prop === p.replace('_', '')) {
+				obj[p] = value;
+				break;
+			}
+			if (typeof obj[p] === 'object') sp(prop, value, obj[p])
+		}
+	},
+	getProp: function gp (prop, obj) {
+		var ret;
+
+		obj = obj || this.attributes;
+		prop = prop.replace(' ', '').toLowerCase()
+		for (var p in obj) {
+			if (prop === p.replace('_', '')) {
+				return obj[p]
+			}
+
+			if (typeof obj[p] === 'object' && obj[p] !== null) ret = gp(prop, obj[p])
+
+			if (ret) break
+		}
+
+		return ret;
+	}
+})
+
+module.exports = new User()
+},{"backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js":[function(require,module,exports){
 /*!
  * Bootstrap v3.2.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -17565,7 +17622,10 @@ function ($) {
                     arrow.css('left', labelWidth / 2 + 'px');
                 }
 
-                textbox.val(mask);
+                if ($(this).val() == '') {
+                    textbox.val(mask);
+                }
+               
 
                 wrapper.find('input').focus(function () {
 
@@ -17773,11 +17833,15 @@ var B = require('backbone'),
 	FieldsetView = require('./FieldsetView.js'),
 	$ = require('jquery'),
 	_ = require('underscore'),
-	RegistrationView = require('./RegistrationView.js');
+	RegistrationView = require('./RegistrationView.js'),
+	DocumentsView = require('./DocumentsView.js');
 
 
 module.exports = RegistrationView.extend({
 	className: 'cabinet-form',
+	initialize: function () {
+		this.documentsView = new DocumentsView();
+	},
 	hide: function () {
 		this.$el.css({
 			opacity: 0,
@@ -17798,6 +17862,54 @@ module.exports = RegistrationView.extend({
 	},
 	render: function () {
 		RegistrationView.prototype.render.call(this, '<div></div>');
+		this.documentsView.render().$el.appendTo(this.$el);
+		console.log(this.documentsView);
+		return this;
+	}
+});
+},{"./DocumentsView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/DocumentsView.js","./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","./RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/DocumentsView.js":[function(require,module,exports){
+var B = require('backbone'),
+	FieldsetView = require('./FieldsetView.js'),
+	$ = require('jquery'),
+	_ = require('underscore'),
+	RegistrationView = require('./RegistrationView.js');
+
+
+var DocumentView = B.View.extend({
+	tagName: 'div',
+	className: 'col-md-4 document-image',
+	events: {
+		'click button': 'onClick'
+	},
+	onClick: function ($evt) {
+		console.log('this');
+		this.$el.remove()
+	},
+	render: function (url) {
+		this.$el.html('<img src="' + url + '"/> <button type="button" class="remove">remove</button>')
+		return this;
+	}
+});
+
+function renderInto ($el) {
+	return function (url) {
+		console.log(url);
+		new DocumentView().render(url).$el.appendTo($el);
+	}
+}
+
+module.exports = RegistrationView.extend({
+	tagName: 'div',
+	className: 'row',
+	render: function () {
+		var that = this;
+		$.ajax({
+			url: '/documents',
+			method: 'GET',
+			success: function (response) {
+				JSON.parse(response).forEach(renderInto(that.$el))
+			}
+		})
 		return this;
 	}
 });
@@ -17809,25 +17921,19 @@ var B = require('backbone'),
 
 var template = '<legend>{{name}}</legend>'
 
-function direction (fromObj, toObj) {
-	
-}
-
-module.exports = B.View.extend({
+var FSview = module.exports = B.View.extend({
 	tagName: 'fieldset',
 	initialize: function (options) {
-		this.name = options.name;
-		this.index = options.index;
+		this.options = options;
 		this.parentView = options.parentView;
 
 		var inputs = [];
 		var that = this;
 
 		options.inputs.forEach(function (input) {
-			var v = new InputView({inputName: input});
+			var v = typeof input === 'object' ? new FSview (_.extend(input, {edit: options.edit})) : new InputView({inputName: input, edit: options.edit});
 			v.on('invalid', function () {
-				// console.log(that.parentView);
-				that.parentView.onNavClick({target: $('a[data-fs-index="' + that.index + '"]')});
+				that.parentView.onNavClick({target: $('a[data-fs-index="' + options.index + '"]')});
 			})
 			inputs.push(v);
 		});
@@ -17835,24 +17941,26 @@ module.exports = B.View.extend({
 		this.inputs = inputs;
 	},
 	render: function () {
+		this.$el.html(_.template(template)(this.options))
 		this.inputs.forEach(function (inputView) {
 			inputView.render().$el.appendTo(this.$el);
 		}, this);
 
-	if (this.index === 3) this.$el.append('<button type=button class="btn btn-primary submit-button">submit</button>')
+		if (this.options.index === 3) this.$el.append('<button type=button class="btn btn-primary submit-button">submit</button>')
+
 		return this;
 	},
 	insertNavItem: function ($nav) {
-		this.$li = $('<li>')
-					.html('<a data-fs-index="' + this.index +'">' + this.name + '</a>')
+		this.$li = $('<li class="' + (this.options.index === 0 ? 'active': '') +  '">')
+					.html('<a data-fs-index="' + this.options.index +'">' + this.options.name + '</a>')
 					.appendTo($nav);
 	},
 	go: function (direction) {
-		this.$el.addClass('go' + direction).removeClass('active');
+		this.$el.addClass('go' + direction);
 		return this;
 	},
 	show: function () {
-		this.$el.removeClass('goright goleft').addClass('active');
+		this.$el.removeClass('goright goleft');
 		return this;
 	},
 	validate: function () {
@@ -17865,12 +17973,18 @@ module.exports = B.View.extend({
 			return next.validate();
 		}, this.inputs[0])
 		
+	},
+	setToUser: function () {
+		this.inputs.forEach(function (input) {
+			input.setToUser();
+		})
 	}
 });
 },{"./InputView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/InputView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/InputView.js":[function(require,module,exports){
 var B = require('backbone'),
 	_ = require('underscore'),
-	$ = require('jquery');
+	$ = require('jquery'),
+	user = require('../models/User');
 
 var text = function (opts) {
 	opts = opts || {};
@@ -17902,32 +18016,42 @@ var fieldsHash = {
     // user: {
         name: text(),
         phone: text({
-        	re: /.{14}/
+        	re: /^\d\s?(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}$/
         }),
         email: text({
-        	re: /.{3}/
+        	re: /^((?:(?:(?:[a-zA-Z0-9][\.\-\+_]?)*)[a-zA-Z0-9])+)\@((?:(?:(?:[a-zA-Z0-9][\.\-_]?){0,62})[a-zA-Z0-9])+)\.([a-zA-Z0-9]{2,6})$/
         }),
         password: text({
-
+        	type: 'password',
         	re: length(4)
         }),
     // },
-    car_model: text({
+    carModel: text({
     	mask: 'Type the model of your car model',
     	re: length(1)
     }),
     // company: {
         vatNumber: text({
         	mask: 'Type the vat number',
-        	re: length(10)
+        	re: length(5)
         }),
-        name: text(),
+        companyName: text({
+        	mask: 'your company name'
+        }),
         // address: {
-            line1: text_,
-            line2: text_,
-            postalCode: text_,
-            // city: text_,
-            countryCode: selectable()
+            line1: text({
+            	mask: 'street'
+            }),
+            line2: text({
+            	mask: 'building number'
+            }),
+            postalCode: text({
+            	mask: 'postal code'
+            }),
+            companyCity: text(),
+            countryCode: selectable({
+            	options: 'Russia,USA,UK,Spain'
+            })
         // }
     // }
 }
@@ -17935,12 +18059,11 @@ var fieldsHash = {
 module.exports = B.View.extend({
 	tagName: 'input',
 	className: 'fancy-textbox masked form-control',
-	events: {
-		'focusin': 'onFocusin',
-		'focusout': 'onFocusout'
-	},
 	initialize: function (opts) {
+		
 		var options = this.options = fieldsHash[opts.inputName] || {};
+		options.name = opts.inputName;
+
 		if (options.type === 'selectable') {
 			var $el = this.$el = $('<select></select>');
 
@@ -17954,10 +18077,17 @@ module.exports = B.View.extend({
 		this.$el.attr({
 			type: options.type || 'text',
 			'data-animation': options.animation || 'slide',
-			'data-label': options.label || 'Enter',
+			'data-label': opts.edit ? 'Edit' : 'Enter',
 			'data-mask': this.mask
 		})
 
+	},
+	initWatcher: function () {
+		this.events = {
+			'focusin': 'onFocusin',
+			'focusout': 'onFocusout'
+		};
+		this.delegateEvents();
 	},
 	onFocusin: function () {
 		function handler () {
@@ -17971,26 +18101,36 @@ module.exports = B.View.extend({
 	render: function () {
 		if (this.options.autocomplete) 
 			this.$el.addClass('tpeahead').attr('data-url', this.options.autocomplete)
+
+		if (user.getProp(this.options.name)) this.$el.val(user.getProp(this.options.name))
 		return this;
 	},
 	validate: function () {
-		if (this.$el.val() === this.mask) {
+		if (!this.check()) {
 			this.trigger('invalid');
-			this.$el.parent().addClass('has-error')
+			this.$el.parent().addClass('has-error');
+			this.initWatcher();
 			return false;
 		}
+
 		return true;
 	},
 	check: function () {
-		return this.$el.val() !== this.mask && this.re.test(this.el.val());
+		if (this.$el.val() === this.mask) return false;
+
+		if (this.re && !this.re.test(this.$el.val())) return false;
+		return true;
+	},
+	setToUser: function () {
+		user.setProp(this.options.name, this.$el.val());
 	}
 });
-},{"backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js":[function(require,module,exports){
+},{"../models/User":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js":[function(require,module,exports){
 var B = require('backbone'),
 	FieldsetView = require('./FieldsetView.js'),
 	$ = require('jquery'),
-	_ = require('underscore');
-
+	_ = require('underscore'),
+	user = require('../models/User');;
 
 var fieldSets = [{
 	name: 'General info',
@@ -18000,16 +18140,17 @@ var fieldSets = [{
 	inputs: ['name', 'phone', 'email', 'password']
 }, {
 	name: 'Car model',
-	inputs: ['car']
+	inputs: ['carModel']
 }, {
 	name: 'Company',
-	inputs: ['vatNumber', 'name', {
+	inputs: ['vatNumber', 'companyName', {
 		name: 'address',
-		inputs: ['line1', 'line2', 'postalCode', 'city', 'countryCode']
+		inputs: ['line1', 'line2', 'postalCode', 'companyCity', 'countryCode']
 	}]
 }];
 
-var _template = '<ul class="registration-nav"></ul> <div class="registration-form-container"><fieldset></fieldset></div>' 
+var _template = '<ul class="registration-nav"></ul> <div class="registration-form-container"><fieldset></fieldset></div>',
+	edit = false;
 
 module.exports = B.View.extend({
 	tagName: 'form',
@@ -18018,6 +18159,7 @@ module.exports = B.View.extend({
 		'click .registration-nav a': 'onNavClick',
 		'click .submit-button': 'onSubmit'
 	},
+	edit: false,
 	onNavClick: function ($evt) {
 		var $target = $($evt.target),
 			i = $target.attr('data-fs-index'),
@@ -18032,13 +18174,21 @@ module.exports = B.View.extend({
 	},
 	onSubmit: function ($evt) {
 		var that = this
-		// if (!this.validate())
-		// 	return;
+
+		if (!this.validate())
+			// return
+			console.log('this');
+
+		this.fieldSets.forEach(function (fs) {
+			fs.setToUser();
+		});
+
 		$.ajax({
 			type: 'POST',
 			url: '/register',
-			data: {a: 'adsf'},
+			data: user.toJSON(),
 			success: function () {
+				edit = true;
 				that.trigger('registered', {});
 			} 
 		});
@@ -18057,15 +18207,14 @@ module.exports = B.View.extend({
 	render: function (template) {
 		this.$el.html(template || _template);
 
-		var fs,
-			$container = this.$('div'),
+		var $container = this.$('div'),
 			$nav = this.$('ul'),
 			that = this;
 
 		this.fieldSets = fieldSets.map(function (fs, index) {
 			fs.index = index;
 			fs.parentView = that;
-			sibling = fs;
+			fs.edit = edit;
 
 			var v = new FieldsetView(fs).render();
 			v.$el.appendTo($container);
@@ -18090,4 +18239,4 @@ module.exports = B.View.extend({
 		}, this.fieldSets[0])
 	}
 });
-},{"./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}]},{},["/Users/koegit/Documents/Programming/projects/wheely/scripts/main.js"]);
+},{"../models/User":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js","./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}]},{},["/Users/koegit/Documents/Programming/projects/wheely/scripts/main.js"]);

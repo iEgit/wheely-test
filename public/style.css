@@ -8268,7 +8268,7 @@ footer {
   font-size: 9px;
 }
 #container {
-  overflow: hidden;
+  overflow: auto;
 }
 .registration-form {
   width: 80%;
@@ -8285,9 +8285,13 @@ footer {
 }
 .registration-form fieldset {
   width: 100%;
-  height: 300px;
+  min-height: 300px;
   float: left;
   transition: opacity 500ms, margin-left 500ms;
+}
+.registration-form fieldset fieldset {
+  margin-top: 20px !important;
+  float: none;
 }
 .registration-form fieldset:not(:first-child) {
   margin-top: -300px;
@@ -8302,8 +8306,8 @@ footer {
 }
 .registration-form fieldset.goleft {
   opacity: 0;
-  pointer-events: none;
   margin-left: -100%;
+  pointer-events: none;
 }
 .registration-form fieldset.goright {
   opacity: 0;
@@ -8411,9 +8415,13 @@ footer {
 }
 .cabinet-form fieldset {
   width: 100%;
-  height: 300px;
+  min-height: 300px;
   float: left;
   transition: opacity 500ms, margin-left 500ms;
+}
+.cabinet-form fieldset fieldset {
+  margin-top: 20px !important;
+  float: none;
 }
 .cabinet-form fieldset:not(:first-child) {
   margin-top: -300px;
@@ -8428,8 +8436,8 @@ footer {
 }
 .cabinet-form fieldset.goleft {
   opacity: 0;
-  pointer-events: none;
   margin-left: -100%;
+  pointer-events: none;
 }
 .cabinet-form fieldset.goright {
   opacity: 0;
@@ -8526,6 +8534,60 @@ footer {
   margin-top: 0px !important;
   height: auto;
   margin-bottom: 10px;
+  min-height: 40px;
+}
+.cabinet-form img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.cabinet-form .document-image .remove {
+  color: #ffffff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
+  transition: opacity 500ms;
+  opacity: 0;
+  top: 10px;
+  right: 10px;
+  position: absolute;
+}
+.cabinet-form .document-image .remove:hover,
+.cabinet-form .document-image .remove:focus,
+.cabinet-form .document-image .remove:active,
+.cabinet-form .document-image .remove.active,
+.open > .dropdown-toggle.cabinet-form .document-image .remove {
+  color: #ffffff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+.cabinet-form .document-image .remove:active,
+.cabinet-form .document-image .remove.active,
+.open > .dropdown-toggle.cabinet-form .document-image .remove {
+  background-image: none;
+}
+.cabinet-form .document-image .remove.disabled,
+.cabinet-form .document-image .remove[disabled],
+fieldset[disabled] .cabinet-form .document-image .remove,
+.cabinet-form .document-image .remove.disabled:hover,
+.cabinet-form .document-image .remove[disabled]:hover,
+fieldset[disabled] .cabinet-form .document-image .remove:hover,
+.cabinet-form .document-image .remove.disabled:focus,
+.cabinet-form .document-image .remove[disabled]:focus,
+fieldset[disabled] .cabinet-form .document-image .remove:focus,
+.cabinet-form .document-image .remove.disabled:active,
+.cabinet-form .document-image .remove[disabled]:active,
+fieldset[disabled] .cabinet-form .document-image .remove:active,
+.cabinet-form .document-image .remove.disabled.active,
+.cabinet-form .document-image .remove[disabled].active,
+fieldset[disabled] .cabinet-form .document-image .remove.active {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+.cabinet-form .document-image .remove .badge {
+  color: #d9534f;
+  background-color: #ffffff;
+}
+.cabinet-form .document-image:hover .remove {
+  opacity: 1;
 }
 .success-register {
   width: 80%;
@@ -8536,4 +8598,7 @@ footer {
   text-align: center;
   font-size: 16px;
   font-style: italic;
+}
+.submit-button {
+  margin-top: 20px !important;
 }

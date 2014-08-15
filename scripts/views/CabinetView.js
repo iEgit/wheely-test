@@ -2,11 +2,15 @@ var B = require('backbone'),
 	FieldsetView = require('./FieldsetView.js'),
 	$ = require('jquery'),
 	_ = require('underscore'),
-	RegistrationView = require('./RegistrationView.js');
+	RegistrationView = require('./RegistrationView.js'),
+	DocumentsView = require('./DocumentsView.js');
 
 
 module.exports = RegistrationView.extend({
 	className: 'cabinet-form',
+	initialize: function () {
+		this.documentsView = new DocumentsView();
+	},
 	hide: function () {
 		this.$el.css({
 			opacity: 0,
@@ -27,6 +31,8 @@ module.exports = RegistrationView.extend({
 	},
 	render: function () {
 		RegistrationView.prototype.render.call(this, '<div></div>');
+		this.documentsView.render().$el.appendTo(this.$el);
+		console.log(this.documentsView);
 		return this;
 	}
 });

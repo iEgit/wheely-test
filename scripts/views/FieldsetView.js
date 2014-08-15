@@ -5,25 +5,19 @@ var B = require('backbone'),
 
 var template = '<legend>{{name}}</legend>'
 
-function direction (fromObj, toObj) {
-	
-}
-
-module.exports = B.View.extend({
+var FSview = module.exports = B.View.extend({
 	tagName: 'fieldset',
 	initialize: function (options) {
-		this.name = options.name;
-		this.index = options.index;
+		this.options = options;
 		this.parentView = options.parentView;
 
 		var inputs = [];
 		var that = this;
 
 		options.inputs.forEach(function (input) {
-			var v = new InputView({inputName: input});
+			var v = typeof input === 'object' ? new FSview (_.extend(input, {edit: options.edit})) : new InputView({inputName: input, edit: options.edit});
 			v.on('invalid', function () {
-				// console.log(that.parentView);
-				that.parentView.onNavClick({target: $('a[data-fs-index="' + that.index + '"]')});
+				that.parentView.onNavClick({target: $('a[data-fs-index="' + options.index + '"]')});
 			})
 			inputs.push(v);
 		});
@@ -31,24 +25,26 @@ module.exports = B.View.extend({
 		this.inputs = inputs;
 	},
 	render: function () {
+		this.$el.html(_.template(template)(this.options))
 		this.inputs.forEach(function (inputView) {
 			inputView.render().$el.appendTo(this.$el);
 		}, this);
 
-	if (this.index === 3) this.$el.append('<button type=button class="btn btn-primary submit-button">submit</button>')
+		if (this.options.index === 3) this.$el.append('<button type=button class="btn btn-primary submit-button">submit</button>')
+
 		return this;
 	},
 	insertNavItem: function ($nav) {
-		this.$li = $('<li>')
-					.html('<a data-fs-index="' + this.index +'">' + this.name + '</a>')
+		this.$li = $('<li class="' + (this.options.index === 0 ? 'active': '') +  '">')
+					.html('<a data-fs-index="' + this.options.index +'">' + this.options.name + '</a>')
 					.appendTo($nav);
 	},
 	go: function (direction) {
-		this.$el.addClass('go' + direction).removeClass('active');
+		this.$el.addClass('go' + direction);
 		return this;
 	},
 	show: function () {
-		this.$el.removeClass('goright goleft').addClass('active');
+		this.$el.removeClass('goright goleft');
 		return this;
 	},
 	validate: function () {
@@ -61,5 +57,10 @@ module.exports = B.View.extend({
 			return next.validate();
 		}, this.inputs[0])
 		
+	},
+	setToUser: function () {
+		this.inputs.forEach(function (input) {
+			input.setToUser();
+		})
 	}
 });
