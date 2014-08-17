@@ -15310,7 +15310,8 @@ Backbone.$ = $;
 
 
 var RegistrationView = require('./views/RegistrationView.js'),
-	CabinetView = require('./views/CabinetView.js');
+	CabinetView = require('./views/CabinetView.js'),
+	SettingsView = require('./views/SettingsView.js');
 
 
 // setting a handlebars-like templates
@@ -15329,7 +15330,9 @@ function onLoad (argument) {
 
 	setUpInputs();
 
-	registrationView.on('registered', function () {
+	(new SettingsView).render().$el.appendTo($container);
+
+	registrationView.once('registered', function () {
 		var cabinetView = new CabinetView()
 							.render()
 							.hide();
@@ -15374,7 +15377,7 @@ function setUpInputs () {
 
 $(onLoad);
 
-},{"./styles/bootstrap-3.2.0/dist/js/bootstrap.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js","./vendor/FancyText.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/vendor/FancyText.js","./views/CabinetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/CabinetView.js","./views/RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","bselect":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/bselect/js/bselect.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","jquery-ui/autocomplete":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery-ui/autocomplete.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js":[function(require,module,exports){
+},{"./styles/bootstrap-3.2.0/dist/js/bootstrap.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js","./vendor/FancyText.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/vendor/FancyText.js","./views/CabinetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/CabinetView.js","./views/RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","./views/SettingsView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/SettingsView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","bselect":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/bselect/js/bselect.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","jquery-ui/autocomplete":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery-ui/autocomplete.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js":[function(require,module,exports){
 var B = require('backbone')
 
 var User  =B.Model.extend({
@@ -15433,7 +15436,24 @@ var User  =B.Model.extend({
 })
 
 module.exports = new User()
-},{"backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js":[function(require,module,exports){
+},{"backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/fieldsets.json":[function(require,module,exports){
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=[{
+	"name": "General info",
+	"inputs": ["city", "applicant"]
+}, {
+	"name": "User info",
+	"inputs": ["name", "phone", "email", "password"]
+}, {
+	"name": "Car model",
+	"inputs": ["carModel"]
+}, {
+	"name": "Company",
+	"inputs": ["vatNumber", "companyName", {
+		"name": "address",
+		"inputs": ["line1", "line2", "postalCode", "companyCity", "countryCode"]
+	}]
+}]
+},{}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/styles/bootstrap-3.2.0/dist/js/bootstrap.js":[function(require,module,exports){
 /*!
  * Bootstrap v3.2.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -17834,13 +17854,46 @@ var B = require('backbone'),
 	$ = require('jquery'),
 	_ = require('underscore'),
 	RegistrationView = require('./RegistrationView.js'),
-	DocumentsView = require('./DocumentsView.js');
+	DocumentsView = require('./DocumentsView.js'),
+	user = require('../models/User.js');
 
+var fieldSets = require('../models/fieldsets.json');
 
 module.exports = RegistrationView.extend({
 	className: 'cabinet-form',
 	initialize: function () {
 		this.documentsView = new DocumentsView();
+	},
+	submit: function () {
+		var template = _.template($('#modal-template').html()),
+			$body = $('body'),
+			$modal = $('<div class="modal">').css('display', 'none').appendTo($body)
+
+
+		$.ajax({
+			url: '/edit',
+			type: 'POST',
+			data: user.toJSON(),
+			success: function () {
+				showModal({body: 'changes have been saved',
+					className: 'success'
+			});
+			},
+			error: function () {
+				showModal({body: 'changes have not been saved',
+					className: 'error'
+			});
+			}
+		})
+
+		function showModal (options) {
+			$modal.html(template(options)).show({
+				duration: 300,
+				complete: function (argument) {
+					setTimeout($modal.hide.bind($modal, 300), 1000)
+				}
+			})
+		}
 	},
 	hide: function () {
 		this.$el.css({
@@ -17850,7 +17903,10 @@ module.exports = RegistrationView.extend({
 		return this;
 	},
 	show: function (cb) {
-		
+		this.undelegateEvents();
+		this.$('button').on('click', this.submit)
+
+		$('#myModal').modal()
 		this.$el.css({display: 'block'})
 			.animate({
 				opacity: 1
@@ -17861,13 +17917,23 @@ module.exports = RegistrationView.extend({
 		return this;
 	},
 	render: function () {
-		RegistrationView.prototype.render.call(this, '<div></div>');
-		this.documentsView.render().$el.appendTo(this.$el);
-		console.log(this.documentsView);
+		var $el = this.$el;
+
+		this.fieldSets = fieldSets.map(function (fs, index) {
+			fs.edit = true;
+
+			var v = new FieldsetView(fs).render();
+			v.$el.appendTo($el);
+
+			return v;
+		});
+
+		this.documentsView.render().$el.appendTo($el);
+
 		return this;
 	}
 });
-},{"./DocumentsView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/DocumentsView.js","./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","./RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/DocumentsView.js":[function(require,module,exports){
+},{"../models/User.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js","../models/fieldsets.json":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/fieldsets.json","./DocumentsView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/DocumentsView.js","./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","./RegistrationView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/RegistrationView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/DocumentsView.js":[function(require,module,exports){
 var B = require('backbone'),
 	FieldsetView = require('./FieldsetView.js'),
 	$ = require('jquery'),
@@ -17903,6 +17969,7 @@ module.exports = RegistrationView.extend({
 	className: 'row',
 	render: function () {
 		var that = this;
+		this.$el.html('<legend>Your documents</legend>')
 		$.ajax({
 			url: '/documents',
 			method: 'GET',
@@ -18132,22 +18199,7 @@ var B = require('backbone'),
 	_ = require('underscore'),
 	user = require('../models/User');;
 
-var fieldSets = [{
-	name: 'General info',
-	inputs: ['city', 'applicant']
-}, {
-	name: 'User info',
-	inputs: ['name', 'phone', 'email', 'password']
-}, {
-	name: 'Car model',
-	inputs: ['carModel']
-}, {
-	name: 'Company',
-	inputs: ['vatNumber', 'companyName', {
-		name: 'address',
-		inputs: ['line1', 'line2', 'postalCode', 'companyCity', 'countryCode']
-	}]
-}];
+var fieldSets = require('../models/fieldsets.json');
 
 var _template = '<ul class="registration-nav"></ul> <div class="registration-form-container"><fieldset></fieldset></div>',
 	edit = false;
@@ -18173,24 +18225,28 @@ module.exports = B.View.extend({
 			.siblings().removeClass('active');
 	},
 	onSubmit: function ($evt) {
-		var that = this
+		var that = this,
+			$button = $('.submit-button').addClass('wait');
 
-		if (!this.validate())
-			// return
-			console.log('this');
+		if (!this.validate()) {
+			$(window).scrollTop(0);
+			return;
+		}
+			
 
 		this.fieldSets.forEach(function (fs) {
 			fs.setToUser();
 		});
 
+		
 		$.ajax({
 			type: 'POST',
 			url: '/register',
 			data: user.toJSON(),
 			success: function () {
-				edit = true;
-				that.trigger('registered', {});
-			} 
+				$button.removeClass('wait');
+				that.trigger('registered');
+			}
 		});
 
 	},
@@ -18239,4 +18295,41 @@ module.exports = B.View.extend({
 		}, this.fieldSets[0])
 	}
 });
-},{"../models/User":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js","./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}]},{},["/Users/koegit/Documents/Programming/projects/wheely/scripts/main.js"]);
+},{"../models/User":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/User.js","../models/fieldsets.json":"/Users/koegit/Documents/Programming/projects/wheely/scripts/models/fieldsets.json","./FieldsetView.js":"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/FieldsetView.js","backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js","underscore":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/underscore/underscore.js"}],"/Users/koegit/Documents/Programming/projects/wheely/scripts/views/SettingsView.js":[function(require,module,exports){
+var B = require('backbone'),
+	$ = require('jquery');
+
+module.exports = B.View.extend({
+	tagName: 'div',
+	className: 'settings',
+	initialize: function () {
+		this.toggled = false;
+		return this;
+	},
+	onClick: function ($evt) {
+		var that = this,
+			$button = $($evt.target).addClass('wait');
+		$.ajax({
+			url: '/latency',
+			type: 'GET',
+			data: {latency: +(!that.toggled)},
+			success: function () {
+				console.log('success');
+				$button.toggleClass('low-latency');
+				that.toggled = !that.toggled;
+				$button.one('click', that.onClick.bind(that))
+			},
+			complete: function () {
+				$button.removeClass('wait');
+			}
+		})		
+	},
+	render: function () {
+		var $button = $('<button type="button" class="btn btn-info">Latency</button>');
+		this.$el.append($button)
+
+		$button.one('click', this.onClick.bind(this))
+		return this;
+	}
+})
+},{"backbone":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/backbone/backbone.js","jquery":"/Users/koegit/Documents/Programming/projects/wheely/node_modules/jquery/dist/jquery.js"}]},{},["/Users/koegit/Documents/Programming/projects/wheely/scripts/main.js"]);

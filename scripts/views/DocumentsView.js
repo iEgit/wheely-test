@@ -33,6 +33,7 @@ module.exports = RegistrationView.extend({
 	className: 'row',
 	render: function () {
 		var that = this;
+		this.$el.html('<legend>Your documents</legend>')
 		$.ajax({
 			url: '/documents',
 			method: 'GET',

@@ -4,22 +4,7 @@ var B = require('backbone'),
 	_ = require('underscore'),
 	user = require('../models/User');;
 
-var fieldSets = [{
-	name: 'General info',
-	inputs: ['city', 'applicant']
-}, {
-	name: 'User info',
-	inputs: ['name', 'phone', 'email', 'password']
-}, {
-	name: 'Car model',
-	inputs: ['carModel']
-}, {
-	name: 'Company',
-	inputs: ['vatNumber', 'companyName', {
-		name: 'address',
-		inputs: ['line1', 'line2', 'postalCode', 'companyCity', 'countryCode']
-	}]
-}];
+var fieldSets = require('../models/fieldsets.json');
 
 var _template = '<ul class="registration-nav"></ul> <div class="registration-form-container"><fieldset></fieldset></div>',
 	edit = false;
@@ -45,24 +30,28 @@ module.exports = B.View.extend({
 			.siblings().removeClass('active');
 	},
 	onSubmit: function ($evt) {
-		var that = this
+		var that = this,
+			$button = $('.submit-button').addClass('wait');
 
-		if (!this.validate())
-			// return
-			console.log('this');
+		if (!this.validate()) {
+			$(window).scrollTop(0);
+			return;
+		}
+			
 
 		this.fieldSets.forEach(function (fs) {
 			fs.setToUser();
 		});
 
+		
 		$.ajax({
 			type: 'POST',
 			url: '/register',
 			data: user.toJSON(),
 			success: function () {
-				edit = true;
-				that.trigger('registered', {});
-			} 
+				$button.removeClass('wait');
+				that.trigger('registered');
+			}
 		});
 
 	},

@@ -11,6 +11,7 @@ var countries = require('./countries.json'),
 		return c.country;
 	});
 
+var latency = false;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -19,16 +20,41 @@ app.get('/', function(req, res){
 });
 
 app.get('/cities', function(req, res){
-  res.send(JSON.stringify(capitals));
+	send(function () {
+		res.send(JSON.stringify(capitals));
+	})
 });
 
 app.post('/register', function (req, res) {
-	res.status(200).end()
+	send(function () {
+		res.status(200).end()
+	})
 });
+
+app.post('/edit', function (req, res) {
+	send(function () {
+		res.status(200).end()
+	})
+})
+
+app.get('/latency', function (req, res) {
+	send(function () {
+		res.status(200).end()
+	})
+	latency = req.param('latency');
+})
 
 var docs = require('./docs.json')
 app.get('/documents', function (req, res) {
-	res.send(JSON.stringify(docs));
+	send(function () {
+		res.send(JSON.stringify(docs));
+	})
 })
+
+
+function send (fn, ctx) {
+	var lat = 1500;
+	setTimeout(fn.bind(ctx || this), +latency ? lat : 0)
+}
 
 app.listen(process.env.PORT || 3000);

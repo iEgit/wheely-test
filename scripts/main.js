@@ -16,7 +16,8 @@ Backbone.$ = $;
 
 
 var RegistrationView = require('./views/RegistrationView.js'),
-	CabinetView = require('./views/CabinetView.js');
+	CabinetView = require('./views/CabinetView.js'),
+	SettingsView = require('./views/SettingsView.js');
 
 
 // setting a handlebars-like templates
@@ -35,7 +36,9 @@ function onLoad (argument) {
 
 	setUpInputs();
 
-	registrationView.on('registered', function () {
+	(new SettingsView).render().$el.appendTo($container);
+
+	registrationView.once('registered', function () {
 		var cabinetView = new CabinetView()
 							.render()
 							.hide();
