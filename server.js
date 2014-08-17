@@ -44,6 +44,12 @@ app.get('/latency', function (req, res) {
 	latency = req.param('latency');
 })
 
+app.get('/latencyStatus', function (req, res) {
+	send(function () {
+		res.status(200).send(latency).end()
+	})
+})
+
 var docs = require('./docs.json')
 app.get('/documents', function (req, res) {
 	send(function () {

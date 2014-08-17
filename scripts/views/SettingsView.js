@@ -14,7 +14,7 @@ module.exports = B.View.extend({
 		$.ajax({
 			url: '/latency',
 			type: 'GET',
-			data: {latency: +(!that.toggled)},
+			data: {latency: +!this.toggled},
 			success: function () {
 				console.log('success');
 				$button.toggleClass('low-latency');
@@ -27,10 +27,23 @@ module.exports = B.View.extend({
 		})		
 	},
 	render: function () {
-		var $button = $('<button type="button" class="btn btn-info">Latency</button>');
+		var $button = $('<button type="button" class="btn btn-info">Latency</button>').hide(),
+			that = this;
 		this.$el.append($button)
 
-		$button.one('click', this.onClick.bind(this))
+
+		$.ajax({
+			url: '/latencyStatus',
+			type: 'GET',
+			success: function (response) {
+
+				that.toggled = Boolean(+response)
+				$button.one('click', that.onClick.bind(that)).
+					addClass(+response ? 'low-latency' : '').
+					show(300)
+			}
+		})
+		
 		return this;
 	}
 })
