@@ -1,0 +1,16 @@
+[{
+	"name": "General info",
+	"inputs": ["city", "applicant"]
+}, {
+	"name": "User info",
+	"inputs": ["name", "phone", "email", "password"]
+}, {
+	"name": "Car model",
+	"inputs": ["carModel"]
+}, {
+	"name": "Company",
+	"inputs": ["vatNumber", "companyName", {
+		"name": "address",
+		"inputs": ["line1", "line2", "postalCode", "companyCity", "countryCode"]
+	}]
+}]
